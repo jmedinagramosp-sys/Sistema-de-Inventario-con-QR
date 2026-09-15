@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ equipo.nombre }} — {{ equipo.sede.nombre }}</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F3EE;
+    --ink:#1C1D1B;
+    --ink-dim:#6B6A63;
+    --line:#D9D5C9;
+    --sede: {{ equipo.sede.color_hex }};
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .app{max-width:480px;margin:0 auto;min-height:100vh;padding:28px 20px 20px;}
+  .badge{display:inline-block;font-size:12px;color:var(--ink-dim);border:1px solid var(--line);border-radius:20px;padding:4px 12px;margin-bottom:20px;}
+  .owner-band{padding:18px 20px;border-radius:10px;margin-bottom:20px;color:#fff;background:var(--sede);}
+  .owner-band .label{font-size:12px;opacity:0.85;margin-bottom:4px;}
+  .owner-band .name{font-size:19px;font-weight:600;}
+  .detail-card{border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .detail-card h2{font-size:17px;font-weight:600;margin:0;padding:16px 18px;border-bottom:1px solid var(--line);}
+  .detail-row{display:flex;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--line);font-size:13.5px;}
+  .detail-row:last-child{border-bottom:none;}
+  .detail-row .k{color:var(--ink-dim);}
+  .detail-row .v{font-weight:500;text-align:right;}
+  .note{font-size:12.5px;color:var(--ink-dim);margin-top:18px;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="badge mono">inventario-clinica.app/equipo/{{ equipo.id }}</div>
+  <div class="owner-band">
+    <div class="label">Este equipo pertenece a</div>
+    <div class="name">{{ equipo.sede.nombre }}</div>
+  </div>
+  <div class="detail-card">
+    <h2>{{ equipo.nombre }}</h2>
+    <div class="detail-row"><span class="k">Categoría</span><span class="v">{{ equipo.categoria.nombre }}</span></div>
+    <div class="detail-row"><span class="k">Ubicación</span><span class="v">{{ equipo.ubicacion|default:"—" }}</span></div>
+    <div class="detail-row"><span class="k">Estado</span><span class="v">{{ equipo.get_estado_display }}</span></div>
+    <div class="detail-row"><span class="k">Registrado</span><span class="v">{{ equipo.fecha_registro|date:"d/m/Y" }}</span></div>
+    <div class="detail-row"><span class="k">Código</span><span class="v mono">#{{ equipo.id }}</span></div>
+  </div>
+  <div class="note">Esta página se generó automáticamente al escanear el código QR físico pegado en el equipo.</div>
+</div>
+</body>
+</html>
