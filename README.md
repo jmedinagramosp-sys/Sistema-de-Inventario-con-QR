@@ -52,7 +52,6 @@ Luego entra a `http://127.0.0.1:8000/admin/` para registrar sedes, categorías y
 
 ## Estructura del proyecto
 
-Luego entra a `http://127.0.0.1:8000/admin/` para registrar sedes, categorías y equipos.
 clinica-inventario/
 ├── config/ # Configuración del proyecto Django
 ├── inventario/ # App principal
@@ -72,4 +71,4 @@ clinica-inventario/
 
 Proyecto desarrollado durante mis prácticas de Ingeniería de Sistemas, a partir de un problema real observado en campo: equipos sin identificación clara de sede a la que pertenece ni estado de uso.
 
-## Estructura del proyecto
+
