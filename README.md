@@ -52,15 +52,20 @@ Luego entra a `http://127.0.0.1:8000/admin/` para registrar sedes, categorías y
 
 ## Estructura del proyecto
 
-clinica-inventario/
-├── config/ # Configuración del proyecto Django
-├── inventario/ # App principal
-│ ├── models.py # Sede, Categoria, Equipo
-│ ├── admin.py # Panel de administración con vista previa del QR
-│ ├── views.py # Vista pública y generación del QR al vuelo
-│ └── templates/inventario/publico.html
-└── requirements.txt
+## Estructura del proyecto
 
+```
+clinica-inventario/
+├── config/                  # Configuración del proyecto Django
+├── inventario/              # App principal
+│   ├── models.py            # Sede, Categoria, Equipo
+│   ├── admin.py             # Panel de administración con vista previa del QR
+│   ├── views.py             # Vista pública y generación del QR al vuelo
+│   └── templates/
+│       └── inventario/
+│           └── publico.html
+└── requirements.txt
+```
 ## Próximos pasos
 
 - [ ] Historial de movimientos entre sedes
@@ -69,6 +74,6 @@ clinica-inventario/
 
 ## Contexto
 
-Proyecto desarrollado durante mis prácticas de Ingeniería de Sistemas, a partir de un problema real observado en campo: equipos sin identificación clara de sede a la que pertenece ni estado de uso.
+Proyecto desarrollado durante mis prácticas de Ingeniería de Sistemas, a partir de un problema real observado en campo: Equipos sin identificación clara de sede a la que pertenece ni estado de uso.
 
 
