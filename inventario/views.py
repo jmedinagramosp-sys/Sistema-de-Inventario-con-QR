@@ -8,17 +8,21 @@ from .models import Equipo
 
 
 def equipo_publico(request, equipo_id):
+    """La página web completa: incluye ficha técnica, fechas, clasificación, etc."""
     equipo = get_object_or_404(Equipo, pk=equipo_id)
     return render(request, "inventario/publico.html", {"equipo": equipo})
 
 
-def equipo_qr_imagen(request, equipo_id):
-    """Genera la imagen QR en memoria, sin guardar ningún archivo en disco.
-
-    Usa el dominio real de la petición (request.build_absolute_uri), así que
-    funciona igual en local, en Render, o en cualquier dominio propio sin
-    tener que hardcodear una URL.
+def equipo_etiqueta(request, equipo_id):
+    """Vista pensada para imprimirse junto al QR en el sticker físico:
+    solo lo esencial (sede, modelo, sistema operativo), nada más.
     """
+    equipo = get_object_or_404(Equipo, pk=equipo_id)
+    return render(request, "inventario/etiqueta.html", {"equipo": equipo})
+
+
+def equipo_qr_imagen(request, equipo_id):
+    """Genera la imagen QR en memoria, sin guardar ningún archivo en disco."""
     equipo = get_object_or_404(Equipo, pk=equipo_id)
     url = request.build_absolute_uri(equipo.get_url_publica())
 

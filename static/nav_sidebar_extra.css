@@ -1,0 +1,147 @@
+/* ===== Menú lateral ===== */
+
+/* ===== Menú lateral (nav-sidebar) con el mismo estilo de tarjetas ===== */
+
+#nav-sidebar .module {
+    background: #fff;
+    border-radius: 10px;
+    margin: 0 10px 14px;
+    overflow: hidden;
+    border: 1px solid #E0DED6;
+}
+
+#nav-sidebar .module caption {
+    display: block;
+    width: 100%;
+    background: #14464A !important;
+    padding: 0 !important;
+}
+
+#nav-sidebar caption a.section {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 14px;
+    color: #fff !important;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+#nav-sidebar .app-auth caption a.section::before {
+    content: "👥";
+    flex-shrink: 0;
+}
+
+#nav-sidebar .app-inventario caption a.section::before {
+    content: "🗂️";
+    flex-shrink: 0;
+}
+
+#nav-sidebar .module table {
+    width: 100% !important;
+    table-layout: auto !important;
+}
+
+#nav-sidebar table tr {
+    border-bottom: 1px solid #F2F1EB;
+}
+
+#nav-sidebar table tr:last-child {
+    border-bottom: none;
+}
+
+#nav-sidebar table th a {
+    color: #1C1D1B;
+    font-size: 13.5px;
+    padding: 8px 14px;
+    display: block;
+}
+
+#nav-sidebar tr.current-model {
+    background: #FBF6EC;
+}
+
+#nav-sidebar tr.current-model th a {
+    color: #9C7A3C !important;
+    font-weight: 600;
+}
+
+#nav-sidebar table td a.changelink,
+#nav-sidebar table td a.viewlink {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 14px;
+    font-size: 10.5px;
+    color: #fff !important;
+    text-decoration: none;
+    background-image: none !important;
+    background: #D97706;
+}
+
+/* Botón "Add" como círculo con un simple + , sin texto */
+#nav-sidebar table td a.addlink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #2563EB;
+    background-image: none !important;
+    color: transparent !important;
+    font-size: 0;
+    position: relative;
+}
+
+#nav-sidebar table td a.addlink::after {
+    content: "+";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+#nav-filter input#searchbar {
+    border-radius: 20px !important;
+    border: 1px solid #ddd !important;
+    padding: 8px 14px !important;
+    margin: 0 10px 14px !important;
+    width: calc(100% - 20px) !important;
+}
+
+/* Forzar que el menú lateral se vea también en celular */
+/* ===== Apilar el layout en celular: menú arriba, contenido abajo ===== */
+@media (max-width: 767px) {
+    .main {
+        flex-direction: column !important;
+    }
+
+    #nav-sidebar {
+        position: static !important;
+        left: auto !important;
+        transform: none !important;
+        visibility: visible !important;
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        margin-left: 0 !important;
+        box-sizing: border-box;
+    }
+
+    /* El botón "<<" de colapsar no hace falta en celular, ya está todo apilado */
+    #toggle-nav-sidebar,
+    .toggle-nav-sidebar {
+        display: none !important;
+    }
+
+    #content, #content-start, .content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+}

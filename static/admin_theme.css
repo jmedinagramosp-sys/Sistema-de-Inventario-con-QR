@@ -1,0 +1,103 @@
+:root {
+    --primary: #14464A;
+    --primary-fg: #fff;
+    --secondary: #6B6A63;
+    --accent: #9C7A3C;
+
+    --link-fg: #14464A;
+    --link-hover-color: #0d3336;
+    --link-selected-fg: #9C7A3C;
+
+    --header-color: #fff;
+    --header-branding-color: #fff;
+    --header-bg: #14464A;
+
+    --breadcrumbs-fg: #E4EEEE;
+    --breadcrumbs-link-fg: #fff;
+    --breadcrumbs-bg: #0d3336;
+
+    --button-bg: #14464A;
+    --button-hover-bg: #0d3336;
+    --default-button-bg: #14464A;
+    --default-button-hover-bg: #0d3336;
+    --close-button-bg: #6B6A63;
+    --close-button-hover-bg: #1C1D1B;
+
+    --object-tools-bg: #9C7A3C;
+    --object-tools-hover-bg: #7d6230;
+
+    --font-family-primary: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    font-family: var(--font-family-primary);
+}
+
+#branding h1, #branding h1 a:link, #branding h1 a:visited {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+div.breadcrumbs a {
+    color: var(--breadcrumbs-link-fg);
+}
+
+.module h2, .module caption, .inline-group h2 {
+    background: var(--primary);
+}
+
+.selector-chosen h2 {
+    background: var(--accent);
+}
+
+/* ===== Páginas de agregar/editar: tarjetas y botones ===== */
+
+#content h1 {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.module {
+    background: #fff;
+    border: 1px solid #E0DED6;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.form-row {
+    padding: 14px 18px;
+    border-bottom: 1px solid #F2F1EB;
+}
+
+.form-row:last-child {
+    border-bottom: none;
+}
+
+.submit-row {
+    background: #F7F6F2;
+    border: 1px solid #E0DED6;
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+
+.submit-row input[type="submit"],
+.submit-row a.button {
+    border-radius: 20px !important;
+    padding: 8px 18px !important;
+    font-weight: 600;
+    border: none !important;
+}
+
+.submit-row .deletelink {
+    background: #DC2626 !important;
+    border-radius: 20px !important;
+    padding: 8px 18px !important;
+    color: #fff !important;
+    text-align: center;
+}
+
+.object-tools a.historylink,
+.object-tools a.viewsitelink {
+    border-radius: 20px !important;
+}

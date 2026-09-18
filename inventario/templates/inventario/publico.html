@@ -21,8 +21,9 @@
   .owner-band{padding:18px 20px;border-radius:10px;margin-bottom:20px;color:#fff;background:var(--sede);}
   .owner-band .label{font-size:12px;opacity:0.85;margin-bottom:4px;}
   .owner-band .name{font-size:19px;font-weight:600;}
-  .detail-card{border:1px solid var(--line);border-radius:10px;overflow:hidden;}
-  .detail-card h2{font-size:17px;font-weight:600;margin:0;padding:16px 18px;border-bottom:1px solid var(--line);}
+  .detail-card{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:16px;}
+  .detail-card h2{font-size:15px;font-weight:600;margin:0;padding:14px 18px;border-bottom:1px solid var(--line);color:var(--ink-dim);text-transform:uppercase;letter-spacing:0.03em;font-size:12px;}
+  .detail-card.main h2{font-size:17px;text-transform:none;letter-spacing:0;color:var(--ink);}
   .detail-row{display:flex;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--line);font-size:13.5px;}
   .detail-row:last-child{border-bottom:none;}
   .detail-row .k{color:var(--ink-dim);}
@@ -37,7 +38,8 @@
     <div class="label">Este equipo pertenece a</div>
     <div class="name">{{ equipo.sede.nombre }}</div>
   </div>
-  <div class="detail-card">
+
+  <div class="detail-card main">
     <h2>{{ equipo.nombre }}</h2>
     <div class="detail-row"><span class="k">Categoría</span><span class="v">{{ equipo.categoria.nombre }}</span></div>
     <div class="detail-row"><span class="k">Ubicación</span><span class="v">{{ equipo.ubicacion|default:"—" }}</span></div>
@@ -45,6 +47,33 @@
     <div class="detail-row"><span class="k">Registrado</span><span class="v">{{ equipo.fecha_registro|date:"d/m/Y" }}</span></div>
     <div class="detail-row"><span class="k">Código</span><span class="v mono">#{{ equipo.id }}</span></div>
   </div>
+
+  {% if equipo.modelo or equipo.cpu or equipo.ram_gb or equipo.sistema_operativo or equipo.numero_serie %}
+  <div class="detail-card">
+    <h2>Ficha técnica</h2>
+    {% if equipo.modelo %}<div class="detail-row"><span class="k">Modelo</span><span class="v">{{ equipo.modelo }}</span></div>{% endif %}
+    {% if equipo.cpu %}<div class="detail-row"><span class="k">CPU</span><span class="v">{{ equipo.cpu }}</span></div>{% endif %}
+    {% if equipo.ram_gb %}<div class="detail-row"><span class="k">RAM</span><span class="v">{{ equipo.ram_gb }} GB</span></div>{% endif %}
+    {% if equipo.sistema_operativo %}<div class="detail-row"><span class="k">Sistema operativo</span><span class="v">{{ equipo.sistema_operativo }}</span></div>{% endif %}
+    {% if equipo.numero_serie %}<div class="detail-row"><span class="k">N° de serie</span><span class="v mono">{{ equipo.numero_serie }}</span></div>{% endif %}
+  </div>
+  {% endif %}
+
+  {% if equipo.grupo_vigencia %}
+  <div class="detail-card">
+    <h2>Clasificación de vigencia</h2>
+    <div class="detail-row"><span class="k">Grupo</span><span class="v">{{ equipo.get_grupo_vigencia_display }}</span></div>
+    {% if equipo.destino_sugerido %}<div class="detail-row"><span class="k">Destino sugerido</span><span class="v">{{ equipo.destino_sugerido }}</span></div>{% endif %}
+  </div>
+  {% endif %}
+
+  {% if equipo.software_asociado %}
+  <div class="detail-card">
+    <h2>Estación médica</h2>
+    <div class="detail-row"><span class="k">Software / consola</span><span class="v">{{ equipo.software_asociado }}</span></div>
+  </div>
+  {% endif %}
+
   <div class="note">Esta página se generó automáticamente al escanear el código QR físico pegado en el equipo.</div>
 </div>
 </body>

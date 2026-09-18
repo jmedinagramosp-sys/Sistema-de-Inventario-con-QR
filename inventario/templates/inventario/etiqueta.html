@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etiqueta — {{ equipo.nombre }}</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C1D1B;
+    --ink-dim:#5B5A54;
+    --line:#C9C5B8;
+    --sede: {{ equipo.sede.color_hex }};
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    padding:24px;
+    background:#EDEBE4;
+    font-family:'IBM Plex Sans',sans-serif;
+    color:var(--ink);
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .toolbar{
+    max-width:340px;
+    margin:0 auto 16px;
+    display:flex;
+    justify-content:center;
+  }
+  .print-btn{
+    padding:10px 20px;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    font-size:14px;
+    cursor:pointer;
+  }
+  .sticker{
+    width:340px;
+    margin:0 auto;
+    background:#fff;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+  }
+  .sticker-band{
+    background:var(--sede);
+    color:#fff;
+    padding:8px 14px;
+    font-size:12px;
+    font-weight:600;
+  }
+  .sticker-body{
+    display:flex;
+    gap:14px;
+    padding:14px;
+    align-items:flex-start;
+  }
+  .sticker-body img{
+    width:96px;
+    height:96px;
+    flex-shrink:0;
+    border:1px solid var(--line);
+    border-radius:6px;
+  }
+  .sticker-info h2{
+    font-size:15px;
+    margin:0 0 6px;
+    line-height:1.25;
+  }
+  .sticker-info .row{
+    font-size:11.5px;
+    color:var(--ink-dim);
+    margin-bottom:2px;
+  }
+  .sticker-info .row b{
+    color:var(--ink);
+    font-weight:500;
+  }
+  .sticker-foot{
+    border-top:1px dashed var(--line);
+    padding:6px 14px 10px;
+    font-size:10.5px;
+    color:var(--ink-dim);
+  }
+
+  @media print {
+    body{ background:#fff; padding:0; }
+    .toolbar{ display:none; }
+    .sticker{ border:1px solid #000; }
+  }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <button class="print-btn" onclick="window.print()">Imprimir etiqueta</button>
+</div>
+
+<div class="sticker">
+  <div class="sticker-band">{{ equipo.sede.nombre }}</div>
+  <div class="sticker-body">
+    <img src="{{ equipo.get_url_qr_imagen }}" alt="Código QR">
+    <div class="sticker-info">
+      <h2>{{ equipo.nombre }}</h2>
+      {% if equipo.modelo %}<div class="row"><b>Modelo:</b> {{ equipo.modelo }}</div>{% endif %}
+      {% if equipo.sistema_operativo %}<div class="row"><b>SO:</b> {{ equipo.sistema_operativo }}</div>{% endif %}
+      {% if equipo.cpu %}<div class="row"><b>CPU:</b> {{ equipo.cpu }}</div>{% endif %}
+      {% if equipo.software_asociado %}<div class="row"><b>Software:</b> {{ equipo.software_asociado }}</div>{% endif %}
+    </div>
+  </div>
+  <div class="sticker-foot mono">#{{ equipo.numero_serie|default:equipo.id }}</div>
+</div>
+</body>
+</html>

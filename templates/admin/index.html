@@ -1,0 +1,70 @@
+{% extends "admin/index.html" %}
+{% load i18n static log admin_extras %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin_dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+
+  <div class="dashboard-card">
+    <div class="dashboard-card-header">
+      <span>🌐</span> Gestión Global
+    </div>
+
+    {% for app in app_list %}
+    <div class="app-group">
+      <div class="app-group-title">
+        {% if app.app_label == 'auth' %}👥{% elif app.app_label == 'inventario' %}🗂️{% else %}📁{% endif %}
+        {{ app.name }}
+      </div>
+      {% for model in app.models %}
+      <div class="model-row">
+        <span class="model-name">{{ model.name }}</span>
+        <span>
+          {% if model.add_url %}
+            <a class="btn-pill btn-add" href="{{ model.add_url }}">+ Nuevo</a>
+          {% endif %}
+          {% if model.admin_url %}
+            <a class="btn-pill btn-view" href="{{ model.admin_url }}">Ver / Editar</a>
+          {% endif %}
+        </span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+  <div class="recent-card">
+    <div class="recent-card-title">Actividad reciente</div>
+    {% get_admin_log 10 as admin_log for_user user %}
+    {% for entry in admin_log %}
+    <div class="recent-item">
+      <span class="recent-icon {{ entry.action_flag|accion_clase }}">{{ entry.action_flag|accion_icono }}</span>
+      <div class="recent-text">
+        <div class="time">{{ entry.action_time|timesince }} atrás</div>
+        <div class="desc">
+          <strong>{{ entry.user.get_username|default:entry.user }}</strong>
+          {{ entry.action_flag|accion_verbo }}
+          {% if entry.is_deletion %}
+            {{ entry.object_repr }}
+          {% else %}
+            <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+          {% endif %}
+        </div>
+        <div class="type">{{ entry.content_type.name|capfirst }}</div>
+      </div>
+    </div>
+    {% empty %}
+    <p>Sin actividad todavía.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
