@@ -137,11 +137,8 @@
     #toggle-nav-sidebar,
     .toggle-nav-sidebar {
         display: none !important;
-    }
 
-    #content, #content-start, .content {
-        margin-left: 0 !important;
-        width: 100% !important;
+        
         box-sizing: border-box;
     }
 }

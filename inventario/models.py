@@ -43,8 +43,6 @@ class Equipo(models.Model):
         B = "B", "Grupo B — Funcional (candidato a Linux Mint)"
         C = "C", "Grupo C — Vigente (se mantiene)"
 
-    # Destino sugerido automático según el grupo de vigencia elegido.
-    # El usuario puede sobrescribirlo a mano si un caso particular lo amerita.
     DESTINOS_SUGERIDOS = {
         GrupoVigencia.A: "Dar de baja / reemplazar",
         GrupoVigencia.B: "Migrar a Linux Mint",
@@ -67,12 +65,24 @@ class Equipo(models.Model):
     )
     fecha_registro = models.DateTimeField(auto_now_add=True)
 
+    # --- Link de Notion: si existe, el QR apunta aquí en vez de a la página interna ---
+    notion_url = models.URLField(
+        max_length=300,
+        blank=True,
+        verbose_name="Link de Notion",
+        help_text="Pega aquí el 'Copy link' de la página de Notion de este equipo. "
+                   "Si lo dejas vacío, el QR usará la página interna del sistema.",
+    )
+
     # --- Ficha técnica (aplica principalmente a PCs/laptops) ---
     modelo = models.CharField(max_length=150, blank=True, help_text="Ej. Dell Optiplex 3020")
     cpu = models.CharField(max_length=150, blank=True, help_text="Ej. Intel i5 10ª generación")
     ram_gb = models.PositiveIntegerField(blank=True, null=True, verbose_name="RAM (GB)")
     sistema_operativo = models.CharField(max_length=100, blank=True, help_text="Ej. Windows 10, Linux Mint")
-    numero_serie = models.CharField(max_length=100, blank=True, verbose_name="N° de serie / etiqueta")
+    numero_serie = models.CharField(
+        max_length=100, blank=True, verbose_name="N° de serie (referencial)",
+        help_text="Dato de referencia del fabricante — no es el identificador oficial, ese es el QR/código del sistema",
+    )
 
     # --- Clasificación de vigencia del parque de PCs ---
     grupo_vigencia = models.CharField(
