@@ -220,3 +220,15 @@ html[data-theme="light"] {
 button.theme-toggle {
     display: none !important;
 }
+
+/* Título del encabezado (en esta versión de Django se llama #site-name) */
+#site-name,
+#site-name a:link,
+#site-name a:visited {
+    color: #fff !important;
+}
+
+#nav-sidebar {
+    padding-top: 24px !important;
+    box-sizing: border-box;
+}

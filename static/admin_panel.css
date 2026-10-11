@@ -1,0 +1,230 @@
+/* ===== Panel principal (inicio del admin) ===== */
+.panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: #1E2A38;
+}
+
+.panel-titulo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.panel-titulo h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+    color: #1E2A38;
+}
+
+.panel-titulo p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #4F5D6B;
+}
+
+.panel-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border-radius: 22px;
+    background: #4B6B8A;
+    color: #fff !important;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.panel-btn:hover {
+    background: #2F4A63;
+}
+
+.panel-fila {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.panel-col {
+    flex: 3 1 360px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.panel-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.panel-card h2 {
+    margin: 0 0 16px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #1E2A38;
+    text-transform: none;
+    letter-spacing: 0;
+    background: none;
+    padding: 0;
+}
+
+.panel-vacio {
+    margin: 0;
+    color: #4F5D6B;
+    font-size: 14px;
+}
+
+/* Barras por sede */
+.barra-fila + .barra-fila {
+    margin-top: 14px;
+}
+
+.barra-texto {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.barra-pista {
+    height: 10px;
+    border-radius: 5px;
+    background: #E6EDF4;
+}
+
+.barra-relleno {
+    height: 10px;
+    border-radius: 5px;
+    background: #4B6B8A;
+}
+
+/* Accesos rápidos */
+.atajos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.atajo {
+    flex: 1 1 150px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid #DDE3EA;
+    border-radius: 10px;
+    color: #1E2A38;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.atajo:hover {
+    background: #F3F6F9;
+    border-color: #C8D6E5;
+}
+
+.atajo-icono {
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border-radius: 10px;
+    background: #E6EDF4;
+    color: #4B6B8A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Actividad reciente */
+.panel-actividad {
+    flex: 2 1 280px;
+    min-width: 0;
+}
+
+.actividad-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-top: 1px solid #EEF1F4;
+}
+
+.actividad-hora,
+.actividad-tipo {
+    font-size: 12px;
+    color: #4F5D6B;
+}
+
+.actividad-texto {
+    font-size: 14px;
+    color: #1E2A38;
+}
+
+.actividad-texto a {
+    color: #3E5F80;
+}
+
+.actividad-item .recent-icon {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.actividad-item .recent-icon.add { background: #3E5F80; }
+.actividad-item .recent-icon.change { background: #B9741F; }
+.actividad-item .recent-icon.delete { background: #B3423F; }
+
+/* ===== Correcciones ===== */
+
+/* Django limita el contenido del inicio a 600px: aquí usa todo el ancho */
+.dashboard #content {
+    width: auto !important;
+    max-width: none !important;
+}
+
+/* El título de la página y los enlaces no deben heredar el azul/subrayado de Django */
+#content .panel-titulo h1 {
+    color: #1E2A38;
+}
+
+.panel a.panel-btn,
+.panel a.panel-btn:link,
+.panel a.panel-btn:visited {
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+.panel a.atajo,
+.panel a.atajo:link,
+.panel a.atajo:visited {
+    color: #1E2A38 !important;
+    text-decoration: none !important;
+}
+
+.panel .actividad-texto a {
+    text-decoration: none;
+}
+
+.panel .actividad-texto a:hover {
+    text-decoration: underline;
+}

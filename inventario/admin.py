@@ -34,6 +34,43 @@ ICONO_BASURA = mark_safe(_SVG % (
 ))
 
 
+def _kpis():
+    """Totales para las tarjetas de resumen (panel principal y lista de equipos)."""
+    return Equipo.objects.aggregate(
+        total=Count("id"),
+        operativos=Count("id", filter=Q(estado=Equipo.Estado.OPERATIVO)),
+        revision=Count("id", filter=Q(estado=Equipo.Estado.REVISION)),
+        baja=Count("id", filter=Q(estado=Equipo.Estado.BAJA)),
+    )
+
+
+def _datos_panel():
+    """Datos que muestra el panel principal: tarjetas y equipos por sede."""
+    sedes = list(Sede.objects.annotate(n=Count("equipos")).order_by("-n", "nombre"))
+    maximo = max([sede.n for sede in sedes], default=0)
+    por_sede = [
+        {
+            "nombre": sede.nombre,
+            "total": sede.n,
+            "porcentaje": round(sede.n * 100 / maximo) if maximo else 0,
+        }
+        for sede in sedes
+    ]
+    return {"kpis": _kpis(), "por_sede": por_sede}
+
+
+# Se agregan esos datos a la página de inicio del admin
+_index_original = admin.site.index
+
+
+def _index_con_datos(request, extra_context=None):
+    extra_context = {**(extra_context or {}), **_datos_panel()}
+    return _index_original(request, extra_context)
+
+
+admin.site.index = _index_con_datos
+
+
 @admin.register(Sede)
 class SedeAdmin(admin.ModelAdmin):
     list_display = ("nombre", "direccion", "color_hex")
@@ -101,12 +138,7 @@ class EquipoAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         """Agrega los totales que se muestran en las tarjetas de arriba de la lista."""
         extra_context = extra_context or {}
-        extra_context["kpis"] = Equipo.objects.aggregate(
-            total=Count("id"),
-            operativos=Count("id", filter=Q(estado=Equipo.Estado.OPERATIVO)),
-            revision=Count("id", filter=Q(estado=Equipo.Estado.REVISION)),
-            baja=Count("id", filter=Q(estado=Equipo.Estado.BAJA)),
-        )
+        extra_context["kpis"] = _kpis()
         return super().changelist_view(request, extra_context=extra_context)
 
     def tiene_notion(self, obj):
