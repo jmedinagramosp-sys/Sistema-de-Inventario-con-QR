@@ -1,13 +1,37 @@
 from io import BytesIO
 
 from django.contrib import admin
+from django.db.models import Count, Q
 from django.http import HttpResponse
+from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 
 from .models import Categoria, Equipo, Sede
 from .views import _dibujar_etiqueta
+
+admin.site.site_header = "Gestión de Inventario de Equipos"
+admin.site.site_title = "Inventario de Equipos"
+admin.site.index_title = "Panel de administración"
+
+_SVG = (
+    '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" '
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">%s</svg>'
+)
+ICONO_QR = mark_safe(_SVG % (
+    '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>'
+    '<rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h1"/>'
+))
+ICONO_LAPIZ = mark_safe(_SVG % (
+    '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/>'
+))
+ICONO_BASURA = mark_safe(_SVG % (
+    '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>'
+    '<path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>'
+    '<line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>'
+))
 
 
 @admin.register(Sede)
@@ -42,7 +66,8 @@ def descargar_etiquetas_pdf(modeladmin, request, queryset):
 @admin.register(Equipo)
 class EquipoAdmin(admin.ModelAdmin):
     list_display = (
-        "nombre", "sede", "categoria", "tiene_notion", "estado", "fecha_registro", "ver_qr",
+        "nombre", "sede", "categoria", "tiene_notion", "estado",
+        "fecha_registro", "ver_qr", "acciones",
     )
     list_filter = ("sede", "categoria", "estado", "grupo_vigencia")
     search_fields = ("nombre", "numero_serie", "modelo")
@@ -73,6 +98,17 @@ class EquipoAdmin(admin.ModelAdmin):
         }),
     )
 
+    def changelist_view(self, request, extra_context=None):
+        """Agrega los totales que se muestran en las tarjetas de arriba de la lista."""
+        extra_context = extra_context or {}
+        extra_context["kpis"] = Equipo.objects.aggregate(
+            total=Count("id"),
+            operativos=Count("id", filter=Q(estado=Equipo.Estado.OPERATIVO)),
+            revision=Count("id", filter=Q(estado=Equipo.Estado.REVISION)),
+            baja=Count("id", filter=Q(estado=Equipo.Estado.BAJA)),
+        )
+        return super().changelist_view(request, extra_context=extra_context)
+
     def tiene_notion(self, obj):
         return bool(obj.notion_url)
 
@@ -80,9 +116,23 @@ class EquipoAdmin(admin.ModelAdmin):
     tiene_notion.short_description = "Notion"
 
     def ver_qr(self, obj):
-        return format_html('<a href="{}" target="_blank">Ver QR</a>', obj.get_url_qr_imagen())
+        return format_html(
+            '<a class="icono-accion" href="{}" target="_blank" title="Ver QR">{}</a>',
+            obj.get_url_qr_imagen(), ICONO_QR,
+        )
 
     ver_qr.short_description = "QR"
+
+    def acciones(self, obj):
+        editar = reverse("admin:inventario_equipo_change", args=[obj.pk])
+        borrar = reverse("admin:inventario_equipo_delete", args=[obj.pk])
+        return format_html(
+            '<a class="icono-accion" href="{}" title="Editar">{}</a>'
+            '<a class="icono-accion icono-borrar" href="{}" title="Eliminar">{}</a>',
+            editar, ICONO_LAPIZ, borrar, ICONO_BASURA,
+        )
+
+    acciones.short_description = ""
 
     def vista_previa_qr(self, obj):
         if obj.pk:

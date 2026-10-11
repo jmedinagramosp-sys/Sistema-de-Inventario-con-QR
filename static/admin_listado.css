@@ -1,0 +1,222 @@
+/* ===== Paleta azul acero =====
+   Se declara con el mismo selector que usa Django para el tema claro/oscuro
+   (html[data-theme]), si no, sus colores por defecto ganan. */
+html[data-theme="light"],
+html[data-theme="dark"],
+:root {
+    --primary: #4B6B8A;
+    --primary-fg: #fff;
+    --secondary: #3E5F80;
+    --accent: #4B6B8A;
+    --link-fg: #3E5F80;
+    --link-hover-color: #2F4A63;
+    --link-selected-fg: #2F4A63;
+    --header-bg: #4B6B8A;
+    --header-color: #fff;
+    --header-branding-color: #fff;
+    --header-link-color: #fff;
+    --breadcrumbs-bg: #2F4A63;
+    --breadcrumbs-fg: #DCE6EF;
+    --breadcrumbs-link-fg: #fff;
+    --button-bg: #4B6B8A;
+    --button-hover-bg: #2F4A63;
+    --default-button-bg: #2F4A63;
+    --default-button-hover-bg: #1F3448;
+    --object-tools-bg: #4B6B8A;
+    --object-tools-hover-bg: #2F4A63;
+}
+
+html[data-theme="light"] {
+    --body-bg: #EEF2F6;
+}
+
+/* Panel principal con la nueva paleta */
+.dashboard-card .dashboard-card-header {
+    background: #4B6B8A;
+}
+
+.recent-card .recent-icon.change {
+    background: #4B6B8A;
+}
+
+.recent-card .recent-text .desc a {
+    color: #3E5F80;
+}
+
+/* ===== Tarjetas de resumen (KPI) ===== */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.kpi-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-bottom: 4px solid var(--kpi-color);
+    color: #1C1D1B;
+}
+
+.kpi-icono {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--kpi-fondo);
+    color: var(--kpi-color);
+    flex-shrink: 0;
+}
+
+.kpi-icono svg {
+    width: 26px;
+    height: 26px;
+}
+
+.kpi-datos { text-align: right; }
+.kpi-numero { font-size: 32px; font-weight: 600; line-height: 1.1; }
+.kpi-etiqueta { font-size: 13px; color: #5B5A54; }
+
+.kpi-total { --kpi-color: #4B6B8A; --kpi-fondo: #E6EDF4; }
+.kpi-ok    { --kpi-color: #3F8F7B; --kpi-fondo: #E3F1ED; }
+.kpi-rev   { --kpi-color: #D18A3A; --kpi-fondo: #FAEBD9; }
+.kpi-baja  { --kpi-color: #C0504D; --kpi-fondo: #F8E1E0; }
+
+@media (max-width: 900px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== Tabla de la lista ===== */
+#changelist .results {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#result_list thead th {
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+#result_list tbody tr:hover {
+    background: #F3F6F9;
+}
+
+.icono-accion {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    color: #5B6B7B;
+    border-radius: 6px;
+}
+
+.icono-accion:hover {
+    background: #E6EDF4;
+    color: #2F4A63;
+}
+
+.icono-accion.icono-borrar:hover {
+    background: #FBE3E2;
+    color: #C0504D;
+}
+
+/* ===== Panel de filtros avanzados ===== */
+#changelist-filter {
+    background: #fff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding-bottom: 10px;
+}
+
+#changelist-filter h2 {
+    background: #E9EEF3;
+    color: #2F4A63;
+    font-size: 14px;
+    text-transform: none;
+    letter-spacing: 0;
+    padding: 12px 16px;
+    margin: 0 0 8px;
+}
+
+#changelist-filter-extra-actions {
+    padding: 4px 16px 8px;
+}
+
+#changelist-filter-extra-actions h3 {
+    margin: 0 0 4px;
+    font-size: 12.5px;
+}
+
+#changelist-filter .filtro-seccion {
+    border: 1px solid #E3E7EC;
+    border-radius: 10px;
+    margin: 10px 12px;
+    padding: 10px 12px;
+    background: #fff;
+}
+
+#changelist-filter .filtro-titulo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: #1C1D1B;
+    cursor: pointer;
+    list-style: none;
+}
+
+#changelist-filter .filtro-titulo::-webkit-details-marker { display: none; }
+#changelist-filter .filtro-icono { display: inline-flex; color: #4B6B8A; }
+
+#changelist-filter .filtro-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+#changelist-filter .chip {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 12px;
+    background: #F1F4F7;
+    color: #33475B;
+    border: 1px solid #DDE3EA;
+    text-decoration: none;
+}
+
+#changelist-filter .chip:hover {
+    background: #E3EAF1;
+}
+
+#changelist-filter .chip.chip-activo {
+    background: #4B6B8A;
+    border-color: #4B6B8A;
+    color: #fff;
+}
+
+/* ===== Sin modo oscuro: se oculta el botón de cambio de tema ===== */
+.theme-toggle,
+button.theme-toggle {
+    display: none !important;
+}

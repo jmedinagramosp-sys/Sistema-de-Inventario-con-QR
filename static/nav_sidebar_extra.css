@@ -1,41 +1,17 @@
-/* ===== Menú lateral ===== */
+/* ===== Menú lateral: tarjetas con encabezado claro, como en el diseño de referencia ===== */
 
-/* ===== Menú lateral (nav-sidebar) con el mismo estilo de tarjetas ===== */
+/* Se oculta el buscador "Start typing to filter" (se deja en el HTML para no romper el JS de Django) */
+#nav-filter {
+    display: none !important;
+}
 
 #nav-sidebar .module {
     background: #fff;
-    border-radius: 10px;
+    border: 1px solid #AEBBCB;
+    border-radius: 12px;
     margin: 0 10px 14px;
     overflow: hidden;
-    border: 1px solid #E0DED6;
-}
-
-#nav-sidebar .module caption {
-    display: block;
-    width: 100%;
-    background: #14464A !important;
     padding: 0 !important;
-}
-
-#nav-sidebar caption a.section {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 10px 14px;
-    color: #fff !important;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 1.35;
-}
-
-#nav-sidebar .app-auth caption a.section::before {
-    content: "👥";
-    flex-shrink: 0;
-}
-
-#nav-sidebar .app-inventario caption a.section::before {
-    content: "🗂️";
-    flex-shrink: 0;
 }
 
 #nav-sidebar .module table {
@@ -43,28 +19,147 @@
     table-layout: auto !important;
 }
 
-#nav-sidebar table tr {
-    border-bottom: 1px solid #F2F1EB;
+/* Encabezado de cada grupo: banda azul clara con ícono y texto oscuro */
+#nav-sidebar .module caption {
+    display: block;
+    width: 100%;
+    background: #E3ECF5 !important;
+    border-bottom: 1px solid #C8D6E5;
+    padding: 0 !important;
+    margin: 0 !important;
+    text-align: left;
 }
 
-#nav-sidebar table tr:last-child {
-    border-bottom: none;
+#nav-sidebar caption a.section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    color: #1F3448 !important;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    line-height: 1.3;
+}
+
+#nav-sidebar caption a.section::before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* Ícono de carpeta abierta (Inventario) */
+#nav-sidebar .app-inventario caption a.section::before {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231F3448' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2'/%3E%3C/svg%3E") no-repeat center / contain;
+}
+
+/* Ícono de personas (Usuarios y Permisos) */
+#nav-sidebar .app-auth caption a.section::before {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231F3448' stroke='%231F3448' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2' fill='none'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3Cpath d='M22 21v-2a4 4 0 0 0-3-3.87' fill='none'/%3E%3Cpath d='M16 3.13a4 4 0 0 1 0 7.75' fill='none'/%3E%3C/svg%3E") no-repeat center / contain;
+}
+
+/* Filas: cada modelo es una fila flexible, para poder redondear la fila activa */
+#nav-sidebar .module tbody {
+    display: block;
+    padding: 6px 0 8px;
+}
+
+#nav-sidebar .module tbody tr {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 2px 8px;
+    border-radius: 12px;
+    background: transparent !important;
+    border: none;
+}
+
+#nav-sidebar .module tbody tr:hover {
+    background: #EEF3FA !important;
+}
+
+#nav-sidebar .module tbody tr th {
+    flex: 1;
+    padding: 0;
+    border: none;
+    background: transparent;
+    text-align: left;
+}
+
+#nav-sidebar .module tbody tr td {
+    flex: 0 0 auto;
+    padding: 0 10px 0 0;
+    border: none;
+    background: transparent;
 }
 
 #nav-sidebar table th a {
-    color: #1C1D1B;
-    font-size: 13.5px;
-    padding: 8px 14px;
     display: block;
+    padding: 12px 14px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1E2A38;
+    text-decoration: none;
 }
 
-#nav-sidebar tr.current-model {
-    background: #FBF6EC;
+#nav-sidebar table th a:hover {
+    color: #1F4B7A;
+}
+
+/* Fila activa: pastilla redondeada con una barra azul a la izquierda */
+#nav-sidebar .module tbody tr.current-model {
+    background: #DCE5F7 !important;
+    border: 1px solid #9FB0D3;
 }
 
 #nav-sidebar tr.current-model th a {
-    color: #9C7A3C !important;
+    color: #1E2A38 !important;
     font-weight: 600;
+}
+
+#nav-sidebar .module tbody tr.current-model::before {
+    content: "";
+    position: absolute;
+    left: -9px;
+    top: 6px;
+    bottom: 6px;
+    width: 4px;
+    border-radius: 2px;
+    background: #4A86D8;
+}
+
+/* Botón "+" : círculo azul claro con el signo azul oscuro */
+#nav-sidebar table td a.addlink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0 !important;
+    border-radius: 50%;
+    background: #CFE0F4;
+    background-image: none !important;
+    color: transparent !important;
+    font-size: 0;
+    position: relative;
+}
+
+#nav-sidebar table td a.addlink:hover {
+    background: #B9D1EC;
+}
+
+#nav-sidebar table td a.addlink::after {
+    content: "+";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1F4B7A;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1;
 }
 
 #nav-sidebar table td a.changelink,
@@ -79,43 +174,7 @@
     background: #D97706;
 }
 
-/* Botón "Add" como círculo con un simple + , sin texto */
-#nav-sidebar table td a.addlink {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: #2563EB;
-    background-image: none !important;
-    color: transparent !important;
-    font-size: 0;
-    position: relative;
-}
-
-#nav-sidebar table td a.addlink::after {
-    content: "+";
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 700;
-}
-
-#nav-filter input#searchbar {
-    border-radius: 20px !important;
-    border: 1px solid #ddd !important;
-    padding: 8px 14px !important;
-    margin: 0 10px 14px !important;
-    width: calc(100% - 20px) !important;
-}
-
-/* Forzar que el menú lateral se vea también en celular */
-/* ===== Apilar el layout en celular: menú arriba, contenido abajo ===== */
+/* ===== Celular: menú arriba y contenido abajo, todo apilado ===== */
 @media (max-width: 767px) {
     .main {
         flex-direction: column !important;
@@ -133,12 +192,14 @@
         box-sizing: border-box;
     }
 
-    /* El botón "<<" de colapsar no hace falta en celular, ya está todo apilado */
     #toggle-nav-sidebar,
     .toggle-nav-sidebar {
         display: none !important;
+    }
 
-        
+    #content, #content-start, .content {
+        margin-left: 0 !important;
+        width: 100% !important;
         box-sizing: border-box;
     }
 }
