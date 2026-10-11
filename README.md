@@ -52,8 +52,6 @@ Luego entra a `http://127.0.0.1:8000/admin/` para registrar sedes, categorías y
 
 ## Estructura del proyecto
 
-## Estructura del proyecto
-
 ```
 clinica-inventario/
 ├── config/                  # Configuración del proyecto Django
