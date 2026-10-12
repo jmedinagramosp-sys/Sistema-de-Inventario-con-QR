@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = [h.strip() for h in config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',') if h.strip()]
 
 _csrf_origins = config('CSRF_TRUSTED_ORIGINS', default='')
-CSRF_TRUSTED_ORIGINS = [o for o in _csrf_origins.split(',') if o]
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',') if o.strip()]
 
 SITE_URL = config("SITE_URL", default="")
 
@@ -129,20 +129,32 @@ STORAGES = {
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
-
+# Esta app no envía correos. En producción se declara el backend SMTP (sin configurar) para que
+# Django no lo trate como "solo desarrollo"; si algún día se necesitan correos, sus opciones
+# (servidor, usuario, contraseña) se agregan aquí leyéndolas de variables de entorno.
 MAILERS = {
     'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+        'BACKEND': (
+            'django.core.mail.backends.console.EmailBackend'
+            if DEBUG
+            else 'django.core.mail.backends.smtp.EmailBackend'
+        ),
     },
 }
+
+# Seguridad (solo en producción)
 if not DEBUG:
+    # El hosting termina el HTTPS y nos reenvía la petición; este encabezado le dice a Django
+    # que el visitante sí entró por https (sin esto, SECURE_SSL_REDIRECT puede dar bucles).
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 60 * 60 * 24 * 7
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+    SECURE_HSTS_SECONDS = 60 * 60 * 24 * 7  # 7 días; subir a 1 año cuando todo esté estable
+    # INCLUDE_SUBDOMAINS y PRELOAD se dejan apagados a propósito: obligarían a https a TODOS los
+    # subdominios del dominio (p. ej. el de la clínica) y PRELOAD es muy difícil de deshacer.
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
     X_FRAME_OPTIONS = 'DENY'
     SECURE_CONTENT_TYPE_NOSNIFF = True
-
 
