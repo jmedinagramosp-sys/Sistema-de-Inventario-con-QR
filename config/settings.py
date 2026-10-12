@@ -28,6 +28,8 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(','
 _csrf_origins = config('CSRF_TRUSTED_ORIGINS', default='')
 CSRF_TRUSTED_ORIGINS = [o for o in _csrf_origins.split(',') if o]
 
+SITE_URL = config("SITE_URL", default="")
+
 
 # Application definition
 
@@ -143,4 +145,4 @@ if not DEBUG:
     X_FRAME_OPTIONS = 'DENY'
     SECURE_CONTENT_TYPE_NOSNIFF = True
 
-print("--- CARGANDO SETTINGS EXTERNO ---")
+

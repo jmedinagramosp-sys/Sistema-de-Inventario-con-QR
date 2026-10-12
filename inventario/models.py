@@ -91,7 +91,13 @@ class Equipo(models.Model):
         blank=True,
         help_text="Clasificación según antigüedad y capacidad (solo aplica a PCs)",
     )
-    destino_sugerido = models.CharField(max_length=150, blank=True)
+    destino_manual = models.CharField(
+        max_length=150,
+        blank=True,
+        verbose_name="Destino (manual)",
+        help_text="Solo si este equipo es un caso particular. Si lo dejas vacío, "
+                  "el destino se calcula solo según el grupo de vigencia.",
+    )
 
     # --- Estaciones médicas (rayos X, espirometría, ECG, etc.) ---
     software_asociado = models.CharField(
@@ -117,7 +123,13 @@ class Equipo(models.Model):
     def get_url_etiqueta(self):
         return reverse("equipo_etiqueta", args=[self.id])
 
-    def save(self, *args, **kwargs):
-        if self.grupo_vigencia and not self.destino_sugerido:
-            self.destino_sugerido = self.DESTINOS_SUGERIDOS.get(self.grupo_vigencia, "")
-        super().save(*args, **kwargs)
+    def get_url_etiqueta_pdf(self):
+        return reverse("equipo_etiqueta_pdf", args=[self.id])
+
+    @property
+    def destino_sugerido(self):
+        """Destino a mostrar. Se calcula cada vez a partir del grupo, así nunca queda
+        desactualizado si el grupo cambia; el valor manual solo lo reemplaza si existe."""
+        if self.destino_manual:
+            return self.destino_manual
+        return self.DESTINOS_SUGERIDOS.get(self.grupo_vigencia, "")

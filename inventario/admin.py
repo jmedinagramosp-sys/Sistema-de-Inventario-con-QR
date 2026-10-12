@@ -1,16 +1,12 @@
-from io import BytesIO
-
 from django.contrib import admin
 from django.db.models import Count, Q
 from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from reportlab.lib.units import mm
-from reportlab.pdfgen import canvas
 
+from . import etiquetas
 from .models import Categoria, Equipo, Sede
-from .views import _dibujar_etiqueta
 
 admin.site.site_header = "Gestión de Inventario de Equipos"
 admin.site.site_title = "Inventario de Equipos"
@@ -85,17 +81,10 @@ class CategoriaAdmin(admin.ModelAdmin):
 
 @admin.action(description="Descargar etiquetas PDF de los equipos seleccionados")
 def descargar_etiquetas_pdf(modeladmin, request, queryset):
-    buffer = BytesIO()
-    c = canvas.Canvas(buffer, pagesize=(100 * mm, 50 * mm))
-    for i, equipo in enumerate(queryset):
-        if i > 0:
-            c.showPage()
-            c.setPageSize((100 * mm, 50 * mm))
-        _dibujar_etiqueta(c, equipo, request)
-    c.save()
-    buffer.seek(0)
-
-    response = HttpResponse(buffer.getvalue(), content_type="application/pdf")
+    pdf = etiquetas.generar_pdf_etiquetas(
+        queryset.select_related("sede"), etiquetas.url_base_del_sitio(request)
+    )
+    response = HttpResponse(pdf, content_type="application/pdf")
     response["Content-Disposition"] = 'attachment; filename="etiquetas.pdf"'
     return response
 
@@ -109,7 +98,7 @@ class EquipoAdmin(admin.ModelAdmin):
     list_filter = ("sede", "categoria", "estado", "grupo_vigencia")
     search_fields = ("nombre", "numero_serie", "modelo")
     autocomplete_fields = ("sede", "categoria")
-    readonly_fields = ("id", "fecha_registro", "vista_previa_qr", "enlace_etiqueta")
+    readonly_fields = ("id", "fecha_registro", "vista_previa_qr", "enlace_etiqueta", "destino_actual")
     actions = [descargar_etiquetas_pdf]
 
     fieldsets = (
@@ -125,7 +114,7 @@ class EquipoAdmin(admin.ModelAdmin):
             "fields": ("modelo", "cpu", "ram_gb", "sistema_operativo", "numero_serie"),
         }),
         ("Clasificación del parque de PCs", {
-            "fields": ("grupo_vigencia", "destino_sugerido"),
+            "fields": ("grupo_vigencia", "destino_manual", "destino_actual"),
         }),
         ("Estaciones médicas", {
             "fields": ("software_asociado",),
@@ -166,8 +155,15 @@ class EquipoAdmin(admin.ModelAdmin):
 
     acciones.short_description = ""
 
+    def destino_actual(self, obj):
+        return obj.destino_sugerido or "—"
+
+    destino_actual.short_description = "Destino vigente"
+
+    # OJO: no usar `obj.pk` para saber si el equipo ya existe. Como el id es un UUID con
+    # valor por defecto, un equipo nuevo (sin guardar) ya tiene pk. `_state.adding` es la forma correcta.
     def vista_previa_qr(self, obj):
-        if obj.pk:
+        if not obj._state.adding:
             destino = obj.notion_url if obj.notion_url else "la página interna del sistema"
             return format_html(
                 '<img src="{}" width="140" /><br><small>Este QR redirige a: {}</small>',
@@ -178,14 +174,13 @@ class EquipoAdmin(admin.ModelAdmin):
     vista_previa_qr.short_description = "Código QR"
 
     def enlace_etiqueta(self, obj):
-        if obj.pk:
+        if not obj._state.adding:
             return format_html(
                 '<a href="{}" target="_blank">Ver etiqueta (HTML)</a> &nbsp;·&nbsp; '
                 '<a href="{}">Descargar PDF 100x50mm ⬇</a>',
                 obj.get_url_etiqueta(),
-                "/equipo/%s/etiqueta.pdf" % obj.id,
+                obj.get_url_etiqueta_pdf(),
             )
         return "Disponible al guardar el equipo"
 
     enlace_etiqueta.short_description = "Etiqueta para el sticker"
-

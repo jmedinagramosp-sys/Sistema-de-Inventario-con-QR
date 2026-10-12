@@ -33,7 +33,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="badge mono">inventario-clinica.app/equipo/{{ equipo.id }}</div>
+  <div class="badge mono">{{ request.get_host }}/equipo/{{ equipo.id }}</div>
   <div class="owner-band">
     <div class="label">Este equipo pertenece a</div>
     <div class="name">{{ equipo.sede.nombre }}</div>
@@ -48,6 +48,7 @@
     <div class="detail-row"><span class="k">Código</span><span class="v mono">#{{ equipo.id }}</span></div>
   </div>
 
+  {% if user.is_staff %}
   {% if equipo.modelo or equipo.cpu or equipo.ram_gb or equipo.sistema_operativo or equipo.numero_serie %}
   <div class="detail-card">
     <h2>Ficha técnica</h2>
@@ -72,6 +73,9 @@
     <h2>Estación médica</h2>
     <div class="detail-row"><span class="k">Software / consola</span><span class="v">{{ equipo.software_asociado }}</span></div>
   </div>
+  {% endif %}
+  {% else %}
+  <div class="note">Ficha técnica y clasificación: <a href="{% url 'admin:login' %}?next={{ request.path }}">inicia sesión</a> si eres personal de Sistemas.</div>
   {% endif %}
 
   <div class="note">Esta página se generó automáticamente al escanear el código QR físico pegado en el equipo.</div>

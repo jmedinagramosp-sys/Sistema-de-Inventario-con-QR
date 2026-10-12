@@ -1,3 +1,36 @@
+// Nombre del tipo de elemento de la página actual, según la clase que Django pone en <body>
+function nombreDelElemento() {
+    var nombres = {
+        'model-equipo': 'equipo',
+        'model-categoria': 'categoría',
+        'model-sede': 'sede',
+        'model-group': 'grupo',
+        'model-user': 'usuario'
+    };
+    for (var clase in nombres) {
+        if (document.body.classList.contains(clase)) return nombres[clase];
+    }
+    return 'elemento';
+}
+
+// Aviso flotante, independiente del diseño de la página
+function mostrarAviso(texto) {
+    var previo = document.getElementById('aviso-seleccion');
+    if (previo) previo.remove();
+
+    var aviso = document.createElement('div');
+    aviso.id = 'aviso-seleccion';
+    aviso.setAttribute('role', 'alert');
+    aviso.textContent = texto;
+    aviso.style.cssText = 'position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:9999;' +
+        'background:#2F4A63;color:#fff;padding:12px 22px;border-radius:999px;font-size:14px;font-weight:500;' +
+        'box-shadow:0 8px 24px rgba(31,45,58,.25);transition:opacity .3s;';
+    document.body.appendChild(aviso);
+
+    setTimeout(function () { aviso.style.opacity = '0'; }, 2500);
+    setTimeout(function () { aviso.remove(); }, 2900);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var actionsDiv = document.querySelector('#changelist-form .actions');
     if (!actionsDiv) return;
@@ -37,6 +70,13 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.innerHTML = cfg.svg;
 
         btn.addEventListener('click', function () {
+            // Django no avisa nada si se envía el formulario sin selección: lo validamos aquí.
+            var marcados = document.querySelectorAll('#changelist-form input.action-select:checked');
+            var todosLosResultados = document.querySelector('#changelist-form input[name="select_across"][value="1"]');
+            if (marcados.length === 0 && !todosLosResultados) {
+                mostrarAviso('Selecciona al menos 1 ' + nombreDelElemento() + '.');
+                return;
+            }
             select.value = opt.value;
             var form = select.closest('form');
             if (form) form.submit();
