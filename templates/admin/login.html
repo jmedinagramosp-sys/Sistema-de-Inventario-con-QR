@@ -1,0 +1,64 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sesión | Gestión de Inventario</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'admin_login.css' %}?v=1">
+</head>
+<body class="login-page">
+  <main class="login-wrap">
+    <section class="login-brand">
+      <div class="brand-logo">S&amp;M</div>
+      <h1>Gestión de Inventario de Equipos</h1>
+      <p class="brand-sub">Controla los equipos de tus sedes, genera etiquetas con QR y mantén todo al día.</p>
+      <ul class="brand-features">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M20 20h.01"/></svg>Etiquetas QR por equipo</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg>Control por sede</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6"/></svg>Estado y reportes al instante</li>
+      </ul>
+      <p class="brand-foot">Clínicas Comas y San Miguel</p>
+    </section>
+
+    <section class="login-form-side">
+      <form class="login-card" action="{{ app_path }}" method="post" id="login-form">
+        {% csrf_token %}
+        <h2>Iniciar sesión</h2>
+        <p class="card-sub">Ingresa tus credenciales para continuar.</p>
+
+        {% if form.errors and not form.non_field_errors %}
+          <div class="login-error">Por favor corrige los errores del formulario.</div>
+        {% endif %}
+        {% if form.non_field_errors %}
+          {% for error in form.non_field_errors %}<div class="login-error">{{ error }}</div>{% endfor %}
+        {% endif %}
+        {% if user.is_authenticated %}
+          <div class="login-error">Estás autenticado como {{ username }}, pero no tienes acceso a esta página. ¿Quieres iniciar sesión con otra cuenta?</div>
+        {% endif %}
+
+        <label for="id_username">Usuario</label>
+        <input type="text" name="username" id="id_username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required>
+
+        <label for="id_password">Contraseña</label>
+        <div class="pw-box">
+          <input type="password" name="password" id="id_password" autocomplete="current-password" required>
+          <button type="button" id="pw-toggle" aria-label="Mostrar contraseña">
+            <svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit" class="login-btn">Entrar</button>
+        <p class="login-help">¿Olvidaste tu contraseña? Pide que la restablezcan en el área de Sistemas.</p>
+      </form>
+    </section>
+  </main>
+  <script>
+    document.getElementById('pw-toggle').addEventListener('click', function () {
+      var i = document.getElementById('id_password');
+      i.type = i.type === 'password' ? 'text' : 'password';
+    });
+  </script>
+</body>
+</html>
